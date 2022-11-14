@@ -38,7 +38,7 @@ def DWNND(training, query, k=3):
     weights   = []
     for i in range(n):
         distances.append([i,(sum(np.subtract(features[i], queryAux)**2))**0.5, 0])  # ate aqui segue da mesma forma que o kNN, exceto que em vez de uma tupla...
-        distances[i][2] = 1/distances[i][1] # utilizamos um array, agora com uma posicao a mais para armazenar tambem o peso
+        distances[i][2] = 1/(distances[i][1]**2) # utilizamos um array, agora com uma posicao a mais para armazenar tambem o peso
     
     distances.sort(key=lambda tup: tup[1])  # novamente ordena o array baseado na distancia
     low = distances[0:k]                    # e armazena as k mais proximas
