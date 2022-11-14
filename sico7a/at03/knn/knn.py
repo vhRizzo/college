@@ -1,4 +1,6 @@
 import numpy as np
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score
 
 ########################################################################\/\/\/ kNN \/\/\/########################################################################
 
@@ -56,7 +58,7 @@ def DWNND(training, query, k=3):
 
 ########################################################################\/\/\/ MAIN \/\/\/#######################################################################
 
-data = open("./dataset/waveform-5000.dat", "r") # abre o arquivo
+data = open("D:/Documents/Faculdade/7_Periodo/SICO7A/at03/dataset/diabetes.dat", "r") # abre o arquivo
 
 n = len(data.readlines())   # armazena a quantidade de elementos no arquivo
 data.seek(0)                # retorna para o inicio
@@ -65,19 +67,9 @@ aux = aux.split()           # divide essa variavel, gerando assim uma lista sepa
 auxData = []                # cria um array auxiliar para armazenar os dados do arquivo
 for i in range(n):          # percorre os elementos contidos no arquivo
     tmp = aux[i].split(',') # dividindo os elementos novamente, mas dessa vez separando pelas virgulas, gerando uma lista de listas
-    # tmp[-1] = 0 if tmp[-1] == "tested_negative" else 1 if tmp[-1] == "tested_positive" else tmp[-1]   # converte as classes nominais para numericas
-    # tmp[-1] = 0 if tmp[-1] == "Iris-setosa" else 1 if tmp[-1] == "Iris-versicolor" else 2 if tmp[-1] == "Iris-virginica" else tmp[-1]
+    tmp[-1] = 0 if tmp[-1] == "tested_negative" else 1 if tmp[-1] == "tested_positive" else tmp[-1]   # converte as classes nominais para numericas
     tmp = [*map(float,tmp[0:len(tmp)-1]),int(tmp[-1])]  # converte os dados dos elementos para float, e a classe para inteiro
     auxData.append([i, *tmp])   # insere os dados no array auxiliar
-
-# a1 = int(n*(1/5))    # 30     # isso aqui serve so pra testar o dataset de iris pra ver se batia com o do professor
-# a2 = int(n*(1/3))    # 50     # se quiser testar, descomenta as linhas 93-100 e comenta as linhas 102-109
-# a3 = int(n*(8/15))   # 80     # descomenta tambem a linha 89
-# a4 = int(n*(2/3))    # 100
-# a5 = int(n*(13/15))  # 130
-
-# treino = auxData[ 0:a1] + auxData[a2:a3] + auxData[a4:a5]
-# teste  = auxData[a1:a2] + auxData[a3:a4] + auxData[a5:n ]
 
 treino = []                     # inicializa o array de elementos treinados
 teste = []                      # inicializa o array de elementos a serem testados
@@ -88,19 +80,64 @@ for i in range(0, n, 5):        # percorre os elementos do arquivo, onde a cada 
     teste.append(auxData[i+3]) if i+3 < n else teste
     treino.append(auxData[i+4]) if i+4 < n else treino
 
-k = [1, 3, 5, 7, 9, 13]     # valores de k a serem testados
+k = [1, 5, 9, 13, 17, 21]     # valores de k a serem testados
 
+print("kNN:\n")
 for j in range(len(k)):     # loop para testar varios k's
-    preds = []              # inicializa o array de predicoes
-    for i in range(len(teste)): # cria uma query pra cada array que sera testado, e roda a funcao desejada
+    predskNN = []              # inicializa o array de predicoes
+    for i in range(len(teste)): # cria uma query pra cada array que sera testado, e roda a kNN
         query = teste[i]
-        # preds.append(kNND(treino, query, k=k[j]))         # deixa essa linha descomentada para rodar o kNN Discreto
-        preds.append(DWNND(treino, query, k=k[j]))          # deixa essa linha descomentada para rodar o DWNN Discreto
+        predskNN.append(kNND(treino, query, k=k[j]))
 
     successes = 0   # inicializa o contador de sucessos
-    for i in range(len(preds)): # verifica se a classe dos elementos testados sao iguais ao seu valor real
-        if teste[i][-1] == preds[i]:    # se sim, incrementa o contador
+    for i in range(len(predskNN)): # verifica se a classe dos elementos testados sao iguais ao seu valor real
+        if teste[i][-1] == predskNN[i]:    # se sim, incrementa o contador
             successes += 1
-    print("Taxa de sucesso para k =", k[j], ":", successes/len(preds))  # printa o k utilizado e a taxa de sucesso
+    print("Taxa de sucesso para k =", k[j], ":", successes/len(predskNN))  # printa o k utilizado e a taxa de sucesso
+
+    knn = KNeighborsClassifier(algorithm='auto', 
+                            leaf_size=30, 
+                            metric='minkowski',
+                            p=2,         # p=2 is equivalent to euclidian distance
+                            metric_params=None, 
+                            n_jobs=1, 
+                            n_neighbors=k[j], 
+                            weights='uniform')
+    train_data = [treino[i][1:len(treino[0])] for i in range(len(treino))]
+    train_labels = [treino[i][-1] for i in range(len(treino))]
+    knn.fit(train_data, train_labels)
+    test_data = [teste[i][1:len(teste[0])] for i in range(len(teste))]
+    test_labels = [teste[i][-1] for i in range(len(teste))]
+    test_data_predicted = knn.predict(test_data)
+    print("Taxa de sucesso da literatura para k =", k[j], ":", accuracy_score(test_data_predicted, test_labels))
+
+print("\nDWNN:\n")
+for j in range(len(k)):
+    predsDWNN = []              # inicializa o array de predicoes
+    for i in range(len(teste)): # cria uma query pra cada array que sera testado, e roda a DWNN
+        query = teste[i]
+        predsDWNN.append(DWNND(treino, query, k=k[j]))
+
+    successes = 0   # inicializa o contador de sucessos
+    for i in range(len(predsDWNN)): # verifica se a classe dos elementos testados sao iguais ao seu valor real
+        if teste[i][-1] == predsDWNN[i]:    # se sim, incrementa o contador
+            successes += 1
+    print("Taxa de sucesso para k =", k[j], ":", successes/len(predsDWNN))  # printa o k utilizado e a taxa de sucesso
+
+    dwnn = KNeighborsClassifier(algorithm='auto', 
+                            leaf_size=30, 
+                            metric='minkowski',
+                            p=2,         # p=2 is equivalent to euclidian distance
+                            metric_params=None, 
+                            n_jobs=1, 
+                            n_neighbors=k[j], 
+                            weights='distance')
+    train_data = [treino[i][1:len(treino[0])] for i in range(len(treino))]
+    train_labels = [treino[i][-1] for i in range(len(treino))]
+    dwnn.fit(train_data, train_labels)
+    test_data = [teste[i][1:len(teste[0])] for i in range(len(teste))]
+    test_labels = [teste[i][-1] for i in range(len(teste))]
+    test_data_predicted = dwnn.predict(test_data)
+    print("Taxa de sucesso da literatura para k =", k[j], ":", accuracy_score(test_data_predicted, test_labels))
 
 #######################################################################/\/\/\ MAIN /\/\/\########################################################################
