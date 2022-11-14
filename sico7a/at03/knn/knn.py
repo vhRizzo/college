@@ -23,26 +23,6 @@ def kNND(training, query, k=3):
 
     return max(rslt, key=rslt.count)    # retorna o elemento que mais se repete
 
-# def kNNC(training, query, k=3):
-#     n = len(training)
-#     aux = len(training[0])
-#     features = [training[i][1:aux-1] for i in range(n)]
-#     target   = [training[i][aux-1] for i in range(n)]
-#     queryAux = query[1:aux-1]
-
-#     distances = []
-#     for i in range(n):
-#         distances.append((i,(sum(np.subtract(features[i], queryAux)**2))**0.5))
-    
-#     distances.sort(key=lambda tup: tup[1])
-#     low = distances[0:k]
-
-#     rslt = []
-#     for i in range(len(low)):
-#         rslt.append(target[low[i][0]])
-
-#     return int(np.round(np.mean(rslt)))
-
 ########################################################################/\/\/\ kNN /\/\/\########################################################################
 
 ########################################################################\/\/\/ DWNN \/\/\/#######################################################################
