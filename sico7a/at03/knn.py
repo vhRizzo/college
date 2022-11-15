@@ -24,9 +24,11 @@ def kNND(training, query, k=3):
 def kNNC(training, query, k=3):
     n = len(training)           # armazena a quantidade de elementos treinados
     aux = len(training[0])      # armazena a quantidade de features
-    features = [training[i][2:aux] for i in range(n)] # armazena as features em um array (ignorando o primeiro '[0]' elemento por ser apenas indice
+    features = [training[i][1:aux-2] for i in range(n)] # armazena as features em um array (ignorando o primeiro '[0]' elemento por ser apenas indice
                                                         # e o ultimo por ser a classe)
-    target   = [training[i][1] for i in range(n)]   # armazena as classes alvo em outro array
+    for i in range(len(features)):
+        features[i].append(training[i][aux-1])
+    target = [training[i][aux-2] for i in range(n)]   # armazena as classes alvo em outro array
     queryAux = query[1:aux-1]   # cria um array auxiliar para a query sem o indice e classe para facilitar nas contas entre este array e o de features
 
     distances = []              # inicializa o array de distancias

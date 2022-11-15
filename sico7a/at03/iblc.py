@@ -32,10 +32,16 @@ k = [3, 9, 15, 21, 27, 33, 39]  # valores de k a serem testados
 print("kNN:\n")
 rmse = []
 for j in range(len(k)):         # loop para testar varios k's
-    train_dataC  = [treino[i][2:len(treino[0])] for i in range(len(treino))]
-    train_labels = [treino[i][1] for i in range(len(treino))]
-    test_dataC   = [teste[i][2:len(teste[0])] for i in range(len(teste))]
-    test_labels  = [teste[i][1] for i in range(len(teste))]
+    aux = len(treino[0])
+    train_dataC  = [treino[i][1:aux-2] for i in range(len(treino))]
+    for i in range(len(train_dataC)):
+        train_dataC[i].append(treino[i][aux-1])
+    train_labels = [treino[i][aux-2] for i in range(len(treino))]
+    aux = len(teste[0])
+    test_dataC   = [teste[i][1:aux-2] for i in range(len(teste))]
+    for i in range(len(test_dataC)):
+        test_dataC[i].append(teste[i][aux-1])
+    test_labels  = [teste[i][aux-2] for i in range(len(teste))]
     
     predskNN = []               # inicializa o array de predicoes
     for i in range(len(teste)): # cria uma query pra cada array que sera testado, e roda a kNN
@@ -66,11 +72,17 @@ plt.show()
 print("DWNN:\n")
 rmse = []
 for j in range(len(k)):         # loop para testar varios k's
-    train_dataC  = [treino[i][2:len(treino[0])] for i in range(len(treino))]
-    train_labels = [treino[i][1] for i in range(len(treino))]
-    test_dataC   = [teste[i][2:len(teste[0])] for i in range(len(teste))]
-    test_labels  = [teste[i][1] for i in range(len(teste))]
-    
+    aux = len(treino[0])
+    train_dataC  = [treino[i][1:aux-2] for i in range(len(treino))]
+    for i in range(len(train_dataC)):
+        train_dataC[i].append(treino[i][aux-1])
+    train_labels = [treino[i][aux-2] for i in range(len(treino))]
+    aux = len(teste[0])
+    test_dataC   = [teste[i][1:aux-2] for i in range(len(teste))]
+    for i in range(len(test_dataC)):
+        test_dataC[i].append(teste[i][aux-1])
+    test_labels  = [teste[i][aux-2] for i in range(len(teste))]
+
     predsDWNN = []               # inicializa o array de predicoes
     for i in range(len(teste)): # cria uma query pra cada array que sera testado, e roda a kNN
         query = teste[i]
