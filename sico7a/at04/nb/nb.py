@@ -1,3 +1,4 @@
+from sklearn.preprocessing import OrdinalEncoder
 from scipy.stats import norm
 import pandas as pd
 import numpy as np
@@ -27,6 +28,31 @@ def isnumber(s: str):
     except ValueError:  # se a convercao apresentou erro
         return False    # retorna falso
     return True         # caso contrario retorna verdadeiro
+
+def encode(df: pd.DataFrame):
+    """
+    Substitui atributos categoricos de um dataframe por um codificador numerico
+
+    Parametros
+    ----------
+    df: pd.DataFrame
+        dataframe para ser codificado
+    
+    Retorna
+    -------
+        dataframe codificado
+    """
+
+    ret = pd.DataFrame(df.values.tolist())  # inicializa o dataframe de retorno (utilizo .tolist() aqui pois sem isso o dataframe de origem...
+                                            # tambem se altera por algum tipo de comportamento de ponteiro)
+    oenc = OrdinalEncoder()                 # inicializa o codificador
+    aux = []                                # inicializa uma lista auxiliar para armazenar os indices de colunas categoricas
+    for i in range(len(ret.columns)):       # percorre os atributos do primeiro dado no dataframe
+        if not(isnumber(ret[i][0])):            # se ele nao for numerico
+            aux.append(i)                           # adiciona o indice a lista auxiliar
+    ret[aux] = pd.DataFrame(oenc.fit_transform(ret[aux]))
+                                            # realiza a codificacao das colunas
+    return ret
 
 def naiveBayes(dataset: list, sample: list, pred_index: int, index_col: int):
     """
