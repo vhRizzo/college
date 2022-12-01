@@ -6,12 +6,12 @@ import numpy as np
 import random
 
 nsamples = 25       # quantidade de amostras para serem testadas
-pred_index = 16     # indice da coluna que se deseja prever (irish = 3 | letter = 16)
+pred_index = 3      # indice da coluna que se deseja prever (irish = 3 | letter = 16)
 isindexcol = None   # indice de qualquer coluna que apenas sirva como indice para os dados...
                     # ('None' se nao houver), nenhum dos dois datasets utilizados possuem...
                     # mas foi testado em datasets que possuiam, e funcionou corretamente
 
-df = pd.read_csv("../datasets/letter.txt", header=None)  # le o arquivo e o armazena em um dataframe do pandas
+df = pd.read_csv("../datasets/irish.txt", header=None)  # le o arquivo e o armazena em um dataframe do pandas
                     # o criterio para o dataset e que ele tenha somente dados, sem linha de cabecalho, os dados devem ser separados...
                     # por quebra de linha, e os atributos dos dados separados por virgula
 
