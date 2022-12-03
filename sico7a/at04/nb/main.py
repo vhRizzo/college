@@ -1,3 +1,13 @@
+import sys
+import subprocess
+
+pipV = 'pip'    # altere para 'pip3' caso seu sistema apenas suporte este comando
+
+subprocess.check_call([sys.executable, '-m', pipV, 'install', 'scikit-learn']) # instala o scikit-learn se já não tiver instalado
+subprocess.check_call([sys.executable, '-m', pipV, 'install', 'pandas'])       # o mesmo para o pandas,
+subprocess.check_call([sys.executable, '-m', pipV, 'install', 'numpy'])        # para o numpy,
+subprocess.check_call([sys.executable, '-m', pipV, 'install', 'scipy'])        # e para o scipy
+
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.impute import SimpleImputer
 from nb import naiveBayes, encode
@@ -10,11 +20,13 @@ pred_index = 3      # indice da coluna que se deseja prever (irish = 3 | letter 
 isindexcol = None   # indice de qualquer coluna que apenas sirva como indice para os dados...
                     # ('None' se nao houver), nenhum dos dois datasets utilizados possuem...
                     # mas foi testado em datasets que possuiam, e funcionou corretamente
-
 df = pd.read_csv("../datasets/irish.txt", header=None)  # le o arquivo e o armazena em um dataframe do pandas
                     # o criterio para o dataset e que ele tenha somente dados, sem linha de cabecalho, os dados devem ser separados...
                     # por quebra de linha, e os atributos dos dados separados por virgula
 
+if nsamples > len(df)/2:
+    print("\n\nQuantidade de amostras excede a quantidade de elementos no dataset\n\n")
+    sys.exit()
 imp = SimpleImputer(missing_values='?', strategy="most_frequent")   # inicializa o metodo de imputacao de dados faltantes se houver
                                         # dados faltantes obrigatoriamente devem ser marcados como '?'
 dataset = imp.fit_transform(df)         # realiza a imputacao

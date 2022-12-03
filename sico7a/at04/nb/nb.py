@@ -116,7 +116,7 @@ def naiveBayes(dataset: list, sample: list, pred_index: int, index_col: int):
                 x = norm(mean, sd)                              # normaliza os valores...
                 prob = x.pdf(float(sample[i]))                  # e gera a a distribuicao normal destes valores
             else:                                       # se nao for um numero
-                prob = sum(sample[i] == subset[k]) / len(subset)# retorna a media de vezes que essa caracteristica aparece no subset
+                prob = sum(sample[i] == subset[k]) / len(subset)# retorna a taxa de frequencia desta caracteristica no subset
             prod = prod * prob                          # calcula o produtorio
         
         answers[j] = answers[j] * prod              # aplica o peso da resposta atual ao produtorio calculado
