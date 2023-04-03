@@ -40,6 +40,10 @@ public class Servidor {
 			// Processamento do valor
 			String resultado = parser(input);
 
+			if (resultado.charAt(resultado.length() - 4) != '\n') {
+				resultado = "{\n\"result\": \"false\"\n}";
+			}
+
 			// Envio dos dados (resultado)
 			saida.writeUTF(resultado);
 
