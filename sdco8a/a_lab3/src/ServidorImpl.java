@@ -40,7 +40,6 @@ public class ServidorImpl implements IMensagem {
 
     public String parserJSON(String json) {
         String result = new String();
-        ;
 
         String list[] = json.split("\""); /*
                                            * Para nao precisar incluir uma biblioteca externa, eu apenas dividi o JSON
