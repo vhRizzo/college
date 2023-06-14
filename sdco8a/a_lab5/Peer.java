@@ -153,6 +153,7 @@ public class Peer implements IMensagem {
 
 			// ---Cliente RMI
 			new ClienteRMI().iniciarCliente();
+			System.exit(0);
 
 		} catch (Exception e) {
 			e.printStackTrace();
