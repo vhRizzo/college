@@ -1,0 +1,4 @@
+br\resources\JakartaEE10Resource.class
+br\Project.class
+br\JakartaRestConfiguration.class
+br\ws\SoapProjectManager.class
