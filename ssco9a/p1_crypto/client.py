@@ -16,7 +16,7 @@ message = file.read()
 file.close()
 
 
-async def test():
+async def client():
     kpu = calcula_pub(kpr)
     async with connect(f"ws://{host}:{port}/public_key?key={kpu}") as websocket:
         response = loads(await websocket.recv())
@@ -32,4 +32,4 @@ async def test():
             print(recv)
 
 
-asyncio.run(test())
+asyncio.run(client())

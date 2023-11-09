@@ -45,9 +45,9 @@ async def handler(websocket, path):
     await websocket.send(message)
 
 
-async def main():
+async def server():
     async with serve(handler, host, port):
         await asyncio.Future()
 
 
-asyncio.run(main())
+asyncio.run(server())
