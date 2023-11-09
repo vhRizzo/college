@@ -1,5 +1,5 @@
 P = 337
-G = 15
+G = 17
 
 
 def calcula_pub(kpr):
